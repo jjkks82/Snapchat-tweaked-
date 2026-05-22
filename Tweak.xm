@@ -1,12 +1,10 @@
 #import <UIKit/UIKit.h>
 
 @interface SCSnapController : UIViewController
-- (void)viewDidLoad;
 - (void)saveSnap;
 @end
 
 @interface SCChatViewController : UIViewController
-- (void)viewDidLoad;
 @end
 
 @interface SCScreenshotDetector : NSObject
@@ -19,30 +17,35 @@
 - (void)setUnlimitedReplays:(BOOL)unlimited;
 @end
 
-// ------ اللمسة البنفسجية ------
+@interface SCPlusHandler : NSObject
+- (BOOL)isPlusSubscriber;
+- (void)showPlusFeatures;
+@end
+
+// ========== Purple UI ==========
 %hook SCChatViewController
 - (void)viewDidLoad {
     %orig;
-    self.view.backgroundColor = [UIColor colorWithRed:0.75 green:0.35 blue:0.85 alpha:1.0]; // بنفسجي
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.75 green:0.35 blue:0.85 alpha:1.0];
-    self.tabBarController.tabBar.barTintColor = [UIColor colorWithRed:0.75 green:0.35 blue:0.85 alpha:1.0];
+    UIColor *purple = [UIColor colorWithRed:0.75 green:0.35 blue:0.85 alpha:1.0];
+    self.view.backgroundColor = purple;
+    self.navigationController.navigationBar.barTintColor = purple;
+    self.tabBarController.tabBar.barTintColor = purple;
 }
 %end
 
-// ------ 1. حفظ السنابات تلقائياً ------
+// ========== Auto Save Snaps ==========
 %hook SCSnapController
 - (void)viewDidLoad {
     %orig;
-    // إضافة زر الحفظ
-    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    saveButton.frame = CGRectMake(self.view.frame.size.width - 60, 50, 40, 40);
-    [saveButton setTitle:@"💾" forState:UIControlStateNormal];
-    [saveButton addTarget:self action:@selector(saveSnap) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:saveButton];
+    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    saveBtn.frame = CGRectMake(self.view.frame.size.width - 60, 50, 40, 40);
+    [saveBtn setTitle:@"💾" forState:UIControlStateNormal];
+    [saveBtn addTarget:self action:@selector(saveSnap) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:saveBtn];
 }
 %end
 
-// ------ 2. إعادة تشغيل غير محدودة ------
+// ========== Unlimited Replays ==========
 %hook SCReplayManager
 - (void)setup {
     %orig;
@@ -50,21 +53,20 @@
 }
 %end
 
-// ------ 3. منع إشعارات التصوير ------
+// ========== No Screenshot Alert ==========
 %hook SCScreenshotDetector
 - (void)startMonitoring {
     %orig;
-    [[SCScreenshotDetector sharedInstance] stopMonitoring]; // إيقاف المراقبة
+    [[SCScreenshotDetector sharedInstance] stopMonitoring];
 }
 %end
 
-// ------ 4. تفعيل مميزات سناب شات بلس ------
+// ========== Fake Snapchat Plus ==========
 %hook SCPlusHandler
 - (BOOL)isPlusSubscriber {
-    return YES; // تزوير الاشتراك
+    return YES;
 }
 - (void)showPlusFeatures {
     %orig;
-    // يمكن إضافة المزيد من التفاصيل هنا
 }
 %end
