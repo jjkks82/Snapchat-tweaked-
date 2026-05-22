@@ -8,8 +8,8 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Build with Theos
         uses: randomblock1/theos-action@v1
         with:
@@ -17,9 +17,9 @@ jobs:
           theos-src: 'https://github.com/theos/theos'
           theos-sdks: 'https://github.com/theos/sdks'
           orion: 'false'
-      
+
       - name: Upload dylib
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SnapchatPlus
           path: ./packages/*.dylib
