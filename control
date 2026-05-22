@@ -1,0 +1,8 @@
+Package: com.you.snapchatplus
+Name: Snapchat Plus
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Full Snapchat Plus features with purple UI
+Maintainer: You
+Author: You
+Section: Tweaks
